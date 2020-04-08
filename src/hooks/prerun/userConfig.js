@@ -39,7 +39,8 @@ const configExists = async () => {
   const options = {
     schema,
     configName: "userConfig",
-    default: defaultVals
+    default: defaultVals,
+    projectName: "csmm-cli"
   };
 
   let userConfig;

@@ -1,7 +1,7 @@
 {
-  "name": "CSMM-CLI",
+  "name": "csmm-cli",
   "description": "A mod manager for Cities: Skylines",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "author": "Saksham Kumar",
   "bin": {
     "csmm": "./bin/run"
@@ -65,7 +65,7 @@
   "repository": "Kumar-Saksham/CSMM-CLI",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
-    "prepack": "oclif-dev manifest && oclif-dev readme",
+    "prepack": "oclif-dev manifest",
     "test": "nyc mocha --forbid-only \"test/**/*.test.js\"",
     "version": "oclif-dev readme && git add README.md"
   }

@@ -104,7 +104,7 @@ class InstallCommand extends Command {
   }
 }
 
-InstallCommand.description = `Install a mod`;
+InstallCommand.description = `Install a single mod or a collection along with their dependencies. Use id in steam URL as the SteamID.`;
 
 InstallCommand.flags = {
   edit: flags.boolean({
