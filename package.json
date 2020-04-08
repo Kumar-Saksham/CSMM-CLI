@@ -6,7 +6,7 @@
   "bin": {
     "csmm": "./bin/run"
   },
-  "bugs": "https://github.com/CSMM-CLI/CSMM-CLI/issues",
+  "bugs": "https://github.com/Kumar-Saksham/CSMM-CLI/issues",
   "dependencies": {
     "@oclif/command": "^1.5.19",
     "@oclif/config": "^1.14.0",
@@ -44,7 +44,7 @@
     "/oclif.manifest.json",
     "/src"
   ],
-  "homepage": "https://github.com/CSMM-CLI/CSMM-CLI",
+  "homepage": "https://github.com/Kumar-Saksham/CSMM-CLI",
   "keywords": [
     "oclif"
   ],
@@ -62,7 +62,7 @@
       ]
     }
   },
-  "repository": "CSMM-CLI/CSMM-CLI",
+  "repository": "Kumar-Saksham/CSMM-CLI",
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "oclif-dev manifest && oclif-dev readme",

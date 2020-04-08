@@ -6,7 +6,7 @@ A simple CLI based mod manager for Cities: Skylines.
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/CSMM-CLI.svg)](https://npmjs.org/package/CSMM-CLI)
 [![Downloads/week](https://img.shields.io/npm/dw/CSMM-CLI.svg)](https://npmjs.org/package/CSMM-CLI)
-[![License](https://img.shields.io/npm/l/CSMM-CLI.svg)](https://github.com/CSMM-CLI/CSMM-CLI/blob/master/package.json)
+[![License](https://img.shields.io/npm/l/CSMM-CLI.svg)](https://github.com/Kumar-Saksham/CSMM-CLI/blob/master/package.json)
 
 <!-- toc -->
 * [Usage](#usage)
