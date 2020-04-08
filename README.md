@@ -1,9 +1,7 @@
 CSMM-CLI
 ========
 
-A mod manager for Cities: Skylines. 
-Allows you to easily install mods from steam workshop.
-Makes managing mods easy with just one command update and uninstall. A beautiful and interactive CLI to deal with mods.
+A simple CLI based mod manager for Cities: Skylines.
 
 [![oclif](https://img.shields.io/badge/cli-oclif-brightgreen.svg)](https://oclif.io)
 [![Version](https://img.shields.io/npm/v/CSMM-CLI.svg)](https://npmjs.org/package/CSMM-CLI)
@@ -41,8 +39,7 @@ $ csmm --help [COMMAND]
 
 ## `csmm install STEAMID`
 
-Install a single mod or a collection. Use id in steam URL as the SteamID.
-
+Install a single mod or a collection along with their dependencies. Use id in steam URL as the SteamID.
 ```
 USAGE
   $ csmm install <STEAMID>
@@ -54,8 +51,6 @@ OPTIONS
   -e, --edit                To edit items of a collection to install (will be ignored for single item).
   -m, --method=STEAM|SMODS  [default: STEAM] download from Steam or Smods?
 ```
-
-_See code: [src/commands/install.js](https://github.com/CSMM-CLI/CSMM-CLI/blob/v0.0.0/src/commands/install.js)_
 
 
 ## `csmm uninstall`
@@ -75,8 +70,6 @@ DESCRIPTION
   Executing command without SteamID will provide an interactive list to uninstall multiple items at once.
 ```
 
-_See code: [src/commands/uninstall.js](https://github.com/CSMM-CLI/CSMM-CLI/blob/v0.0.0/src/commands/uninstall.js)_
-
 ## `csmm update`
 
 Updates all of the (outdated) mods. Will also install missing dependencies (required items) if any.
@@ -89,11 +82,9 @@ DESCRIPTION
   If updates are available for mods, this command will updates all (outdated) installed mods.
 ```
 
-_See code: [src/commands/update.js](https://github.com/CSMM-CLI/CSMM-CLI/blob/v0.0.0/src/commands/update.js)_
-
 ## `csmm list`
 
-List all the installed mods
+Lists all the installed mods
 
 ```
 USAGE
@@ -103,11 +94,9 @@ DESCRIPTION
   Presents a table of mods installed along with their IDs and DATES of when they were last updated by their authors.
 ```
 
-_See code: [src/commands/list.js](https://github.com/CSMM-CLI/CSMM-CLI/blob/v0.0.0/src/commands/list.js)_
-
 ## `csmm help [COMMAND]`
 
-display help for csmm
+Display help for csmm
 
 ```
 USAGE
@@ -119,8 +108,6 @@ ARGUMENTS
 OPTIONS
   --all  see all commands in CLI
 ```
-
-_See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v2.2.3/src/commands/help.ts)_
 
 <!-- commandsstop -->
 
