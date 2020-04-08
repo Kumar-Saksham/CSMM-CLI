@@ -3,7 +3,7 @@ const { Input } = require("enquirer");
 const colors = require("ansi-colors");
 const fs = require("fs-extra");
 
-const setupConfig = async userConfig => {
+const setupConfig = async (userConfig) => {
   console.log(colors.cyanBright("USER CONFIG SETUP"));
   const homeDirLoc =
     process.env.LOCALAPPDATA ||
@@ -36,7 +36,7 @@ const setupConfig = async userConfig => {
     initial: `${saveLocationSuggestion}`,
     validate(input) {
       return fs.pathExistsSync(input);
-    }
+    },
   });
 
   const concurrencyPrompt = new Input({
@@ -49,7 +49,7 @@ const setupConfig = async userConfig => {
     },
     result(value) {
       return parseInt(value);
-    }
+    },
   });
 
   const tempFolderPrompt = new Input({
@@ -60,7 +60,7 @@ const setupConfig = async userConfig => {
     validate(input) {
       fs.ensureDirSync(input);
       return fs.pathExistsSync(input);
-    }
+    },
   });
 
   try {
@@ -73,12 +73,13 @@ const setupConfig = async userConfig => {
       user: {
         saveLocation,
         concurrency,
-        tempFolder
+        tempFolder,
       },
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     });
   } catch (e) {
     console.log("Exiting config setup", e);
+    throw new Error("Error while completing userConfig");
   }
 };
 

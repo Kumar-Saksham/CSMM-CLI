@@ -10,29 +10,29 @@ const schema = {
       saveLocation: {
         type: "string",
         minLength: 1,
-        maxLength: 255
+        maxLength: 255,
       },
       tempFolder: {
         type: "string",
         minLength: 1,
-        maxLength: 255
+        maxLength: 255,
       },
       concurrency: {
         type: "integer",
         minimum: 1,
-        maximum: 9
-      }
+        maximum: 9,
+      },
     },
-    required: ["saveLocation", "concurrency", "tempFolder"]
-  }
+    required: ["saveLocation", "concurrency", "tempFolder"],
+  },
 };
 
 const defaultVals = {
   user: {
     saveLocation: "UNDEFINED",
-    concurrency: "UNDEFINED"
+    concurrency: "UNDEFINED",
   },
-  lastUpdated: null
+  lastUpdated: null,
 };
 
 const configExists = async () => {
@@ -40,12 +40,13 @@ const configExists = async () => {
     schema,
     configName: "userConfig",
     default: defaultVals,
-    projectName: "csmm-cli"
+    projectName: "csmm-cli",
   };
 
   let userConfig;
   try {
     userConfig = new Conf(options);
+    //console.log(userConfig.path);
   } catch (e) {
     const { schema, ...rest } = options;
     const temp = new Conf(rest);
