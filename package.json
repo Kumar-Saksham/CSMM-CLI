@@ -1,0 +1,72 @@
+{
+  "name": "CSMM-CLI",
+  "description": "A mod manager for Cities: Skylines",
+  "version": "0.0.0",
+  "author": "Saksham Kumar",
+  "bin": {
+    "csmm": "./bin/run"
+  },
+  "bugs": "https://github.com/CSMM-CLI/CSMM-CLI/issues",
+  "dependencies": {
+    "@oclif/command": "^1.5.19",
+    "@oclif/config": "^1.14.0",
+    "@oclif/plugin-help": "^2.2.3",
+    "ansi-colors": "^4.1.1",
+    "cli-table": "^0.3.1",
+    "conf": "^6.2.3",
+    "enquirer": "^2.3.4",
+    "extract-zip": "^2.0.0",
+    "figures": "^3.2.0",
+    "fs-extra": "^9.0.0",
+    "got": "^10.7.0",
+    "log-update": "^4.0.0",
+    "moment": "^2.24.0",
+    "puppeteer": "^2.1.1",
+    "string-length": "^4.0.1",
+    "term-size": "^2.2.0",
+    "uuid": "^7.0.3",
+    "why-is-node-running": "^2.1.2"
+  },
+  "devDependencies": {
+    "@oclif/dev-cli": "^1.22.2",
+    "@oclif/test": "^1.2.5",
+    "chai": "^4.2.0",
+    "globby": "^10.0.2",
+    "mocha": "^5.2.0",
+    "nyc": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=8.0.0"
+  },
+  "files": [
+    "/bin",
+    "/npm-shrinkwrap.json",
+    "/oclif.manifest.json",
+    "/src"
+  ],
+  "homepage": "https://github.com/CSMM-CLI/CSMM-CLI",
+  "keywords": [
+    "oclif"
+  ],
+  "license": "MIT",
+  "main": "src/index.js",
+  "oclif": {
+    "commands": "./src/commands",
+    "bin": "csmm",
+    "plugins": [
+      "@oclif/plugin-help"
+    ],
+    "hooks": {
+      "prerun": [
+        "./src/hooks/prerun/userConfig.js"
+      ]
+    }
+  },
+  "repository": "CSMM-CLI/CSMM-CLI",
+  "scripts": {
+    "postpack": "rm -f oclif.manifest.json",
+    "prepack": "oclif-dev manifest && oclif-dev readme",
+    "test": "nyc mocha --forbid-only \"test/**/*.test.js\"",
+    "version": "oclif-dev readme && git add README.md"
+  }
+}
