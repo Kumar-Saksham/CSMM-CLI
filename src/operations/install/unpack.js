@@ -17,9 +17,12 @@ const unzip = async (source, destination) => {
   const entries = zip.getEntries();
 
   for (entry of entries) {
-    if (!outputDirectory && entry.isDirectory) {
-      outputDirectory = entry.entryName.match(/([^/\\.])+/g)[0];
-      break;
+    if (!outputDirectory) {
+      const regex = /[/|(\\|\\\\)]/;
+      const allDirs = entry.entryName.split(regex);
+      if (allDirs.length <= 1) continue;
+      outputDirectory = allDirs[0];
+      if (outputDirectory) break;
     }
   }
 

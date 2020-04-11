@@ -58,11 +58,11 @@ $ csmm --version
 # Usage
 <!-- usage -->
 ```sh-session
-csmm [COMMAND] [ARGS] [FLAGS]
+$ csmm [COMMAND] [ARGS] [FLAGS]
 
-csmm (-v|--version|version)
+$ csmm (-v|--version|version)
 
-csmm --help [COMMAND]
+$ csmm --help [COMMAND]
 ```
 <!-- usagestop -->
 # Commands
@@ -155,42 +155,35 @@ OPTIONS
 
 # Examples
 
-### When you run the CLI for the first time it will ask you a few configuration questions.
+When you run the CLI for the first time it will ask you a few configuration questions.
 
 - **Saves Directory:** Your Cities: Skylines main saves directory.
 - **Concurrent Tasks:** Maximum no. of simultaneous downloads or fetching.
 - **Temperory Downloads Folder:** Self explanatory.
 
-#### If the pre-filled details are correct, just press enter (or return) otherwise you can fill in your own custom details
+If the pre-filled details are correct, just press enter (or return) otherwise you can fill in your own custom details
 
 ![Grabbing SteamID demo](./demo/config.gif "Grabbing SteamID demo")
 
-<br>
-
-### Grab the **SteamID** from Cities: Skylines Steam workshop page of the mod.
+Grab the **SteamID** from Cities: Skylines Steam workshop page of the mod.
 ![Grabbing SteamID demo](./demo/steamId.gif "Grabbing SteamID demo")
 
-</br>
 
-### Use this **SteamID** to install the mod using the ***Install*** command.
+Use this **SteamID** to install the mod using the ***Install*** command.
 ![Install Command demo](./demo/install.gif "Install Command demo")
 
-</br>
 
-### If you wish to uninstall the mod you can use the ***Uninstall*** command with the id of the mod.
+If you wish to uninstall the mod you can use the ***Uninstall*** command with the id of the mod.
 ![Uninstall Command with SteamID demo](./demo/uninstallWithId.gif "Uninstall Command with SteamID demo")
 
-</br>
 
-### If you don't remember the id to the mod you can grab the id of installed mods from the ***List*** command
+If you don't remember the id to the mod you can grab the id of installed mods from the ***List*** command
 ![List Command demo](./demo/list.gif "List Command demo")
 
-</br>
 
-### Or if you wish to uninstall multiple mods at once you can just use the ***Uninstall*** command without any SteamID
+Or if you wish to uninstall multiple mods at once you can just use the ***Uninstall*** command without any SteamID
 ![Uninstall Command without SteamID demo](./demo/uninstallWithoutId.gif "Uninstall Command without SteamID demo")
 
-</br>
 
 ---
 ## FAQ
