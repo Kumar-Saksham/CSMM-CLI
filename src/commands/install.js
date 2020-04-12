@@ -39,8 +39,8 @@ class InstallCommand extends Command {
     const articleList = Object.values(articleDirectory);
     console.log(colors.yellow("\nTOTAL ITEM COUNT:"), articleList.length);
 
-    const logger = new Logger();
-    const seq = async article => {
+    const logger = new Logger({ total: articleList.length });
+    const seq = async (article) => {
       try {
         logger.insert(article);
 
@@ -62,7 +62,7 @@ class InstallCommand extends Command {
           downloadLink,
           path.join(__tempFolder, "packed"),
           undefined,
-          progress => {
+          (progress) => {
             logger.update(article.id, loggerStates.download, progress.percent);
           }
         );
@@ -77,16 +77,17 @@ class InstallCommand extends Command {
 
         logger.update(article.id, loggerStates.success);
       } catch (e) {
-        logger.update(article.id, loggerStates.fail, null, e.message);
         if (e.type === "FAIL") {
+          logger.update(article.id, loggerStates.fail, null, e.message);
           return Promise.resolve();
         }
-        return Promise.reject(e.message);
+        logger.update(article.id, loggerStates.warn, null, e.message);
+        return Promise.reject(e);
       }
     };
 
     const stats = await promisePool(
-      articleList.map(article => () => seq(article)),
+      articleList.map((article) => () => seq(article)),
       __concurrencyLimit
     );
 
@@ -111,18 +112,22 @@ InstallCommand.flags = {
     char: "e",
     description:
       "To edit items of a collection (will be ignored for single item)",
-    default: false
+    default: false,
   }),
   method: flags.string({
     char: "m",
     description: "download from Steam or Smods?",
     options: ["STEAM", "SMODS"],
-    default: "STEAM"
-  })
+    default: "STEAM",
+  }),
 };
 
 InstallCommand.args = [
-  { name: "steamId", required: true, description: "SteamID of item/collection" }
+  {
+    name: "steamId",
+    required: true,
+    description: "SteamID of item/collection",
+  },
 ];
 
 module.exports = InstallCommand;

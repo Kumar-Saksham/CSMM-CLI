@@ -5,96 +5,115 @@ const termSize = require("term-size");
 const stringLength = require("string-length");
 
 const states = {
-	start: "START",
-	grabLink: "GRAB_DOWNLOAD_LINK",
-	download: "DOWNLOAD",
-	install: "INSTALL",
-	success: "SUCCESS",
-	fail: "FAIL"
+  start: "START",
+  grabLink: "GRAB_DOWNLOAD_LINK",
+  download: "DOWNLOAD",
+  install: "INSTALL",
+  success: "SUCCESS",
+  warn: "WARN",
+  fail: "FAIL",
 };
 
 class Logger {
-	constructor() {
-		this.actives = {};
-		this.log = logUpdate.create(process.stderr, { showCursor: false });
-		this.previousOutput = "";
-		this.marginWidth = termSize().columns;
-		this.barWidth = 50;
-		this.successfullyCompleted = 0;
-	}
+  constructor(options = {}) {
+    this.actives = {};
+    this.log = logUpdate.create(process.stderr, { showCursor: false });
+    this.previousOutput = "";
+    this.marginWidth = termSize().columns;
+    this.barWidth = 40;
+    this.successfullyCompleted = 0;
+    this.totalCount = options.total;
+  }
 
-	get renderText() {
-		const itemsToRender = Object.values(this.actives);
+  terminatingStates = [states.success, states.warn, states.fail];
 
-		const successCounter = `${colors.yellow(
-			` [${this.successfullyCompleted}]`
-		)}`;
+  renderText(options = { margin: true }) {
+    const itemsToRender = Object.values(this.actives);
 
-		const margin = `${colors.dim(
-			"━".repeat(this.marginWidth - stringLength(successCounter))
-		)}${successCounter}`;
+    const successCounter = `${colors.yellow(
+      ` [${this.successfullyCompleted}]`
+    )}`;
 
-		return `${margin}\n${itemsToRender
-			.map(item => this.style[item.state](item))
-			.join("\n")}`;
-	}
+    const margin = `${colors.grey(
+      "━".repeat(this.marginWidth - stringLength(successCounter))
+    )}${successCounter}\n`;
 
-	style = {
-		START: item => `${item.title}: STARTING...`,
-		GRAB_DOWNLOAD_LINK: item => `${item.title}: GRABBING DOWNLOAD LINK...`,
-		DOWNLOAD: item => {
-			return `${item.title}: |${colors.green(
-				"#".repeat(item.progress)
-			)}${colors.dim("-".repeat(this.barWidth - item.progress))}|`;
-		},
-		INSTALL: item => `${item.title}: INSTALLING...`,
-		SUCCESS: item => `${item.title} ${colors.green(figures.tick)}`,
-		FAIL: item => `${item.title} ${colors.red(figures.cross)} ${item.message}`
-	};
+    return `${options.margin ? margin : ""}${itemsToRender
+      .map((item) => this.style[item.state](item))
+      .join("\n")}`;
+  }
 
-	insert(item) {
-		this.actives[item.id] = {
-			title: item.title,
-			state: states.start,
-			progress: 0,
-			message: ""
-		};
-		this.render();
-	}
+  style = {
+    START: (item) => `${item.title}: STARTING...`,
+    GRAB_DOWNLOAD_LINK: (item) =>
+      `${item.title}: ${colors.magenta("GRABBING DOWNLOAD LINK...")}`,
+    DOWNLOAD: (item) => {
+      return `${item.title}: |${colors.green(
+        "#".repeat(item.progress)
+      )}${colors.dim("-".repeat(this.barWidth - item.progress))}|`;
+    },
+    INSTALL: (item) => `${item.title}: ${colors.magenta("INSTALLING...")}`,
+    SUCCESS: (item) => `[${colors.green(figures.tick)}] ${item.title}`,
+    WARN: (item) =>
+      `[${colors.yellow("!")}] ${item.title} ${colors.yellow(
+        item.message
+      )}`,
+    FAIL: (item) =>
+      `[${colors.red(figures.cross)}] ${item.title} ${colors.red(
+        item.message
+      )}`,
+  };
 
-	remove(id, finalState) {
-		const itemToDelete = this.actives[id];
-		delete this.actives[id];
-		this.log.clear();
-		this.log.done();
-		console.log(this.style[finalState](itemToDelete));
-	}
+  insert(item) {
+    this.actives[item.id] = {
+      title: item.title,
+      state: states.start,
+      progress: 0,
+      message: "",
+    };
+    //this.render();
+  }
 
-	update(id, state, progress, message = "") {
-		const itemToUpdate = this.actives[id];
-		if (state === states.fail || state === states.success) {
-			if (state === states.success) {
-				this.successfullyCompleted++;
-			}
-			itemToUpdate.message = message;
-			this.remove(id, state);
-		}
-		itemToUpdate.state = state;
-		if (progress) {
-			const newProgressValue = Math.floor(progress * this.barWidth);
-			if (newProgressValue === itemToUpdate.progress) {
-				return;
-			}
-			itemToUpdate.progress = newProgressValue;
-		}
-		this.render();
-	}
+  remove(id) {
+    const itemToDelete = this.actives[id];
+    delete this.actives[id];
+    const activesBackup = this.actives;
+    this.actives = [itemToDelete];
+    this.render({ margin: false });
+    this.log.done();
+    this.log = logUpdate.create(process.stderr, { showCursor: false });
+    this.actives = activesBackup;
+    this.render();
+    //console.log(this.style[itemToDelete.state](itemToDelete));
+  }
 
-	render() {
-		const output = this.renderText;
-		this.log(output);
-		this.previousOutput = output;
-	}
+  update(id, state, progress, message = "") {
+    const itemToUpdate = this.actives[id];
+    itemToUpdate.state = state;
+
+    if (this.terminatingStates.includes(state)) {
+      if (state === states.success) {
+        this.successfullyCompleted++;
+      }
+      itemToUpdate.message = message;
+      this.remove(id);
+    }
+
+    if (progress) {
+      const newProgressValue = Math.floor(progress * this.barWidth);
+      if (newProgressValue === itemToUpdate.progress) {
+        return;
+      }
+      itemToUpdate.progress = newProgressValue;
+    }
+    this.render();
+  }
+
+  render(options) {
+    const output = this.renderText(options);
+    this.log(output);
+    this.previousOutput = output;
+  }
 }
 
 module.exports = Logger;
