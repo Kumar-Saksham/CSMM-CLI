@@ -14,12 +14,18 @@ const configStructure = {
   concurrency: {
     path: "process.concurrency",
     validate: concurrencyValidation,
-    convert: (tmp) => parseInt(tmp),
+    convert: (x) => {
+      x = Number(x);
+      return x < 0 ? Math.ceil(x) : Math.floor(x);
+    },
   },
   transferProgressTimeout: {
     path: "process.transferProgressTimeout",
     validate: transferProgressTimeoutValidation,
-    convert: (tmp) => parseInt(tmp),
+    convert: (x) => {
+      x = Number(x);
+      return x < 0 ? Math.ceil(x) : Math.floor(x);
+    },
   },
   saveDir: {
     path: "path.saveDir",

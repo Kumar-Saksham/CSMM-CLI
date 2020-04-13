@@ -16,6 +16,7 @@ const getUserConfig = async () => {
   const validity = await validate(userConfig);
 
   if (!validity.valid || !userConfig.has("lastUpdated")) {
+    console.error(validity.errors);
     userConfig.reset("path", "process");
 
     try {

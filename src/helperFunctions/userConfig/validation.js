@@ -4,6 +4,11 @@ const dirValidation = async (path) => {
   return path && (await fs.pathExists(path));
 };
 
+const ToInteger = (x) => {
+  x = Number(x);
+  return x < 0 ? Math.ceil(x) : Math.floor(x);
+};
+
 const saveDirValidation = async (path) => {
   return await dirValidation(path);
 };
@@ -13,11 +18,13 @@ const tmpDirValidation = async (path) => {
 };
 
 const concurrencyValidation = async (concurrency) => {
-  return parseInt(concurrency, 10) && concurrency <= 6 && concurrency >= 1;
+  concurrency = ToInteger(concurrency);
+  return concurrency && concurrency <= 6 && concurrency >= 1;
 };
 
 const transferProgressTimeoutValidation = async (time) => {
-  return Number.isInteger(time) && time >= 5000;
+  time = ToInteger(time);
+  return time && time >= 5000;
 };
 
 const validation = async (userConfig) => {
