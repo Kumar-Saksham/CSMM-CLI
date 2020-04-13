@@ -59,7 +59,7 @@
     ],
     "hooks": {
       "prerun": [
-        "./src/hooks/prerun/userConfig.js"
+        "./src/hooks/prerun/parseUserConfig"
       ]
     }
   },

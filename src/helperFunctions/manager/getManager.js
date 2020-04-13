@@ -7,13 +7,13 @@ const getManager = async () => {
   const options = {
     schema,
     configName: "manager",
-    cwd: __savesDirectory
+    cwd: __saveDir
   };
   let manager;
   try {
     manager = new Conf(options);
   } catch {
-    await fs.remove(path.join(__savesDirectory, "manager.json"));
+    await fs.remove(path.join(__saveDir, "manager.json"));
     manager = new Conf(options);
   }
   return manager;

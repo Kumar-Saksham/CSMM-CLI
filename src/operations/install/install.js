@@ -12,7 +12,7 @@ const locationOf = require("./categoryLocation");
 //   return lastDir.trim();
 // };
 
-const capitalSnakeCase = str => {
+const capitalSnakeCase = (str) => {
   return str
     .match(/[a-zA-Z]+/g)
     .join("_")
@@ -21,7 +21,7 @@ const capitalSnakeCase = str => {
 
 const installer = async (article, downloadedFilePath) => {
   const manager = await getManager();
-  const unpackedDir = path.join(__tempFolder, "unpacked");
+  const unpackedDir = __unpackedDir;
   const unpackedItemDir = await unpack(downloadedFilePath, unpackedDir);
 
   const jsonContent = JSON.stringify(article);
@@ -48,9 +48,9 @@ const installer = async (article, downloadedFilePath) => {
         title: article.title,
         updated: article.updated,
         location: installLocation,
-        id: article.id
-      }
-    }
+        id: article.id,
+      },
+    },
   });
 };
 

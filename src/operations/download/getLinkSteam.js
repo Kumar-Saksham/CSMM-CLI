@@ -30,7 +30,7 @@ const acquireDownloadLink2 = async id => {
 
   if (!downloadButtonExists) {
     await page.screenshot({
-      path: path.join(__logsFolder, "STEAMWORKSHOP-mod-unavailable-for-download.png"),
+      path: path.join(__logDir, "STEAMWORKSHOP-mod-unavailable-for-download.png"),
       fullPage: true
     });
     await page.close();

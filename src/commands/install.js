@@ -60,7 +60,7 @@ class InstallCommand extends Command {
 
         const downloadedFilePath = await download(
           downloadLink,
-          path.join(__tempFolder, "packed"),
+          __packedDir,
           undefined,
           (progress) => {
             logger.update(article.id, loggerStates.download, progress.percent);
