@@ -1,23 +1,26 @@
 const retry = async (
-  unsafeFuntion,
-  catchFunciton,
-  doomedFuntion,
+  unsafeFunction,
+  catchFunction,
+  doomedFunction,
   forceExit,
   maxAttempts = 3
 ) => {
   let currentAttempt = 0;
+  if (!unsafeFunction) {
+    throw new Error("Missing unsafe function");
+  }
 
   while (true) {
-    if (currentAttempt >= maxAttempts || forceExit()) {
-      await doomedFuntion();
+    if (currentAttempt >= maxAttempts || (forceExit && forceExit())) {
+      doomedFunction && (await doomedFunction());
       break;
     }
     currentAttempt++;
     try {
-      await unsafeFuntion();
+      await unsafeFunction();
       break;
     } catch (e) {
-      await catchFunciton();
+      catchFunction && (await catchFunction());
     }
   }
 };

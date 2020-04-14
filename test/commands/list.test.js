@@ -13,7 +13,7 @@ describe("list", () => {
   });
 
   test
-    .do(() => (this.testManager.setStore = {}))
+    .do(() => (this.testManager.store = {}))
     .stdout()
     .command(["list"])
     .it("should show no mods installed if manager is empty", (ctx) => {

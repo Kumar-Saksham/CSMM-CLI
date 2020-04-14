@@ -4,18 +4,18 @@ const path = require("path");
 const { promisify } = require("util");
 const uuid = require("uuid").v4;
 const got = require("got");
-const parseURL = require("../../helperFunctions/parseURL");
+const parseFileUrl = require("../../helperFunctions/parseFileUrl");
 
 const pipeline = promisify(stream.pipeline);
 
 const download = (url, directory, filename, onProgress) => {
-  const fromURL = parseURL(url);
+  const fromURL = parseFileUrl(url);
   filename = `${filename || uuid()}${fromURL.extension}`;
 
   return new Promise((resolve, reject) => {
     const downloadStream = got
       .stream(url)
-      .on("response", async response => {
+      .on("response", async (response) => {
         if (!response.headers["content-type"].includes("application")) {
           //Not a file
           let completeResponse = "";
@@ -29,7 +29,7 @@ const download = (url, directory, filename, onProgress) => {
           let noProgressTimer;
           const noProgressTimeout = 5000;
 
-          downloadStream.on("downloadProgress", progress => {
+          downloadStream.on("downloadProgress", (progress) => {
             if (noProgressTimer) clearImmediate(noProgressTimer);
             onProgress(progress);
             noProgressTimer = setTimeout(() => {
@@ -57,7 +57,7 @@ const download = (url, directory, filename, onProgress) => {
           resolve(fileLink);
         }
       })
-      .on("error", e => {
+      .on("error", (e) => {
         reject(e);
       });
   });
