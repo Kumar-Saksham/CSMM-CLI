@@ -68,3 +68,4 @@ module.exports.saveDirValidation = saveDirValidation;
 module.exports.tmpDirValidation = tmpDirValidation;
 module.exports.concurrencyValidation = concurrencyValidation;
 module.exports.transferProgressTimeoutValidation = transferProgressTimeoutValidation;
+module.exports.dirValidation = dirValidation;
