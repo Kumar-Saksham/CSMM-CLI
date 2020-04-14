@@ -8,17 +8,22 @@ class ListCommand extends Command {
     const manager = await getManager();
     const table = new Table({
       head: ["#", "ID", "Title", "Last Updated"],
-      colWidths: [10, 15, 50, 25]
+      colWidths: [10, 15, 50, 25],
     });
 
     const list = Object.values(manager.get("installed"));
+
+    if (!list.length) {
+      console.log("No mods installed yet");
+      return;
+    }
 
     list.map((item, i) =>
       table.push([
         i + 1,
         item.id,
         item.title,
-        moment(item.updated).format("lll")
+        moment(item.updated).format("lll"),
       ])
     );
 
