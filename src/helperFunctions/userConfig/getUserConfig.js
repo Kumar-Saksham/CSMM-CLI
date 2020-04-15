@@ -1,6 +1,6 @@
 const Conf = require("conf");
 const schema = require("./userConfigSchema");
-const validate = require("./validation");
+const validate = require("./validation").configValidation;
 const setup = require("./setupUserConfig");
 const defaultUserConfig = require("./defaultUserConfig").config;
 
