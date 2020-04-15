@@ -62,6 +62,7 @@ const setupConfig = async (
     )} ${colors.grey("(1 - 6)")}`,
     initial: concurrencySuggestion,
     async validate(input) {
+      input = parseInt(input);
       const valid = await concurrencyValidation(input);
       return valid
         ? true

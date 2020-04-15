@@ -3,15 +3,8 @@ const path = require("path");
 const fs = require("fs-extra");
 
 before(async () => {
-  const userConfig = await getUserConfig();
-
-  const bckpFilePath = path.join(userConfig.path, "..", "back.json");
-  await fs.copy(userConfig.path, bckpFilePath);
-
   const testDir = path.join(__dirname, "..", "..", "tmp", "testDir");
-  await fs.ensureDir(testDir);
-
-  const testUserConfig = {
+  const testUserConfigStore = {
     path: {
       saveDir: path.join(testDir, "saveDir"),
       tmpDir: path.join(testDir, "tmpDir"),
@@ -23,12 +16,13 @@ before(async () => {
     lastUpdated: new Date().toISOString(),
   };
 
-  await fs.ensureDir(testUserConfig.path.saveDir);
-  await fs.ensureDir(testUserConfig.path.tmpDir);
+  await fs.ensureDir(testDir);
+  await fs.ensureDir(testUserConfigStore.path.saveDir);
+  await fs.ensureDir(testUserConfigStore.path.tmpDir);
 
-  global.testUserConfig = testUserConfig;
+  global.testDir = testDir;
+  global.testUserConfig = testUserConfigStore;
+
+  const userConfig = await getUserConfig(testUserConfigStore);
   global.userConfig = userConfig;
-  global.bckpFilePath = bckpFilePath;
-  global.ogPath = userConfig.path;
-  userConfig.store = testUserConfig;
 });

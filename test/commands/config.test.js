@@ -40,8 +40,12 @@ describe("config <property>", () => {
 });
 
 describe("config <property> <value>", () => {
+  before(() => {
+    this.testUserConfigBackup = global.userConfig.store;
+  });
+
   afterEach(() => {
-    global.userConfig.store = global.testUserConfig;
+    global.userConfig.store = this.testUserConfigBackup;
   });
 
   test

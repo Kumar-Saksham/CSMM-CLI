@@ -3,7 +3,7 @@
 --timeout 5000
 
 # setup
+--file ./test/setup/mocha.env
 --file ./test/setup/testUserConfig.js
 
 # teardown
---file ./test/teardown/restoreUserConfig.js
