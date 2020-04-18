@@ -20,7 +20,7 @@ const retry = async (
       await unsafeFunction();
       break;
     } catch (e) {
-      catchFunction && (await catchFunction());
+      catchFunction && (await catchFunction(e));
     }
   }
 };
