@@ -42,12 +42,12 @@ const acquireDownloadLink2 = async (id) => {
     await page.click("#steamdownload.button");
     await page.waitForSelector("#result > pre > a", {
       visible: true,
-      timeout: 20000,
+      timeout: 100000,
     });
   } catch {
     await page.close();
     await browser.close();
-    throw new Error("Unable to download from steam");
+    throw new Err("Unable to download from steam");
   }
 
   /* istanbul ignore next */

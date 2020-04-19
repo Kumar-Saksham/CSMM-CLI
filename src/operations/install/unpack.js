@@ -1,7 +1,5 @@
 const fs = require("fs-extra");
 const path = require("path");
-const extract = require("extract-zip");
-const Err = require("../../helperFunctions/err");
 const Zip = require("adm-zip");
 
 const unzip = async (source, destination) => {
@@ -38,6 +36,9 @@ const unzip = async (source, destination) => {
     }
   }
 
+  if (!outputDirectory) {
+    throw new Error("Bad file");
+  }
   zip.extractAllTo(destination);
 
   return path.join(destination, outputDirectory);

@@ -5,6 +5,7 @@ const { promisify } = require("util");
 const uuid = require("uuid").v4;
 const got = require("got");
 const parseFileUrl = require("../../helperFunctions/parseFileUrl");
+const Err = require("../../helperFunctions/err");
 
 const pipeline = promisify(stream.pipeline);
 
@@ -23,7 +24,7 @@ const download = (url, directory, filename, onProgress) => {
             completeResponse += chunk;
           }
 
-          reject(completeResponse);
+          reject(new Err(`Not a file: ${completeResponse}`, "FAIL"));
         } else {
           //valid file
           let noProgressTimer;

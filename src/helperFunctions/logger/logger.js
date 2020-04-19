@@ -58,7 +58,7 @@ class Logger {
     WARN: (item) =>
       `[${colors.yellow("!")}] ${item.title} ${colors.yellow(item.message)}`,
     FAIL: (item) =>
-      `[${colors.red(figures.cross)}] ${item.title} ${colors.red(
+      `[${colors.red("x")}] ${item.title} ${colors.red(
         item.message
       )}`,
   };

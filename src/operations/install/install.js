@@ -3,12 +3,18 @@ const path = require("path");
 const unpack = require("./unpack");
 const getManager = require("../../helperFunctions/manager/getManager");
 const relativePathOf = require("./categoryLocation");
+const Err = require("../../helperFunctions/err");
 
 const installer = async (article, downloadedFilePath) => {
   const manager = await getManager();
 
   const unpackedDir = __unpackedDir;
-  const unpackedItemDir = await unpack(downloadedFilePath, unpackedDir);
+  let unpackedItemDir;
+  try {
+    unpackedItemDir = await unpack(downloadedFilePath, unpackedDir);
+  } catch (e) {
+    throw new Err(e.message, "FAIL");
+  }
 
   const itemFileLink = path.join(unpackedItemDir, "item.json");
   await fs.ensureFile(itemFileLink);
@@ -23,7 +29,7 @@ const installer = async (article, downloadedFilePath) => {
   try {
     await fs.move(unpackedItemDir, installLocation, { overwrite: true });
   } catch {
-    throw new Error("ERROR WHILE MOVING");
+    throw new Err("ERROR WHILE MOVING", "FAIL");
   }
 
   manager.set({
