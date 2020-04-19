@@ -4,8 +4,8 @@ const defaultSaveDir = () => {
   const homeDirLoc =
     process.env.LOCALAPPDATA ||
     (process.platform == "darwin"
-      ? process.env.HOME + "/Library/Application Support"
-      : process.env.HOME + "/.local/share");
+      ? path.join(process.env.HOME, "/Library/Application Support")
+      : path.join(process.env.HOME, "/.local/share"));
 
   const locationInHomeDir = "/Colossal Order/Cities_Skylines/";
   return path.join(homeDirLoc, locationInHomeDir);
@@ -34,8 +34,20 @@ const defaultConfig = {
   },
 };
 
-module.exports.config = defaultConfig;
-module.exports.saveDir = defaultSaveDir();
-module.exports.tmpDir = defaultTmpDir();
-module.exports.concurrency = defaultConcurrency();
-module.exports.transferProgressTimeout = defaultTransferProgressTimeout();
+module.exports = {
+  get config() {
+    return defaultConfig;
+  },
+  get saveDir() {
+    return defaultSaveDir();
+  },
+  get tmpDir() {
+    return defaultTmpDir();
+  },
+  get concurrency() {
+    return defaultConcurrency();
+  },
+  get transferProgressTimeout() {
+    return defaultTransferProgressTimeout();
+  },
+};

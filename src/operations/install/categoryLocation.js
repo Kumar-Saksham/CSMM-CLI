@@ -1,18 +1,25 @@
 const path = require("path");
-const categories = require("../../helperFunctions/categories");
+const getClass = require("../../helperFunctions/categories");
 
-const categoryLocation = category => {
+const safeNameConverter = (input) => {
+  return input.trim().replace(/&/g, "N").replace(/ /g, "_").toUpperCase();
+};
+
+const categoryLocation = (category) => {
+  category = safeNameConverter(category);
   const locations = {
-    MODS: path.join(__saveDir, "Addons/Mods/"),
-    MAP_THEMES: path.join(__saveDir, "Addons/MapThemes/"),
-    MAPS: path.join(__saveDir, "Maps"),
-    ASSETS: path.join(__saveDir, "Addons/Assets/"),
-    SAVEGAMES: path.join(__saveDir, "Saves/"),
-    SCENARIOS: path.join(__saveDir, "Scenarios/"),
-    STYLES: path.join(__saveDir, "Addons/styles/")
+    MODS: "./Addons/Mods/",
+    MAP_THEMES: "./Addons/MapThemes/",
+    MAPS: "./Maps",
+    ASSETS: "./Addons/Assets/",
+    SAVEGAMES: "./Saves/",
+    SCENARIOS: "./Scenarios/",
+    STYLES: "./Addons/styles/",
   };
 
-  return locations[categories[category].class];
+  const ans = locations[getClass(category)];
+  if (!ans) console.error(category);
+  return ans;
 };
 
 module.exports = categoryLocation;

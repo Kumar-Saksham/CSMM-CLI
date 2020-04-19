@@ -4,12 +4,11 @@ const getPage = require("../../helperFunctions/blockOnPage");
 const retry = require("../../helperFunctions/retry");
 const Err = require("../../helperFunctions/err");
 
-const acquireDownloadLink2 = async id => {
+const acquireDownloadLink2 = async (id) => {
   const url = `http://steamworkshop.download/download/view/${id}`;
   const browser = await puppeteer.launch();
   let page = await getPage(browser, { script: true });
 
-  forceQuitRetries = false;
   await retry(
     async () => {
       await page.goto(url, { waitUntil: "networkidle2" });
@@ -22,38 +21,37 @@ const acquireDownloadLink2 = async id => {
       await page.close();
       await browser.close();
       throw new Error("Unable to load first download page");
-    },
-    () => forceQuitRetries
+    }
   );
 
   const downloadButtonExists = await page.$("#steamdownload.button");
-
   if (!downloadButtonExists) {
     await page.screenshot({
-      path: path.join(__logDir, "STEAMWORKSHOP-mod-unavailable-for-download.png"),
-      fullPage: true
+      path: path.join(
+        __logDir,
+        "STEAMWORKSHOP-mod-unavailable-for-download.png"
+      ),
+      fullPage: true,
     });
     await page.close();
     await browser.close();
-    throw new Err("Mod not available for download", "FAIL")
+    throw new Err("Mod not available for download", "FAIL");
   }
 
   try {
     await page.click("#steamdownload.button");
     await page.waitForSelector("#result > pre > a", {
       visible: true,
-      timeout: 20000
+      timeout: 100000,
     });
   } catch {
     await page.close();
     await browser.close();
-    throw new Error("Unable to download from steam");
+    throw new Err("Unable to download from steam");
   }
 
-  //CLICKING ON ACTUAL DOWNLOAD BUTTON TO GRAB FILE LINK
-  const downloadLink = await page.evaluate(() => {
-    return document.querySelector("#result > pre > a").href;
-  });
+  /* istanbul ignore next */
+  const downloadLink = await page.$eval("#result > pre > a", (dl) => dl.href);
 
   await page.close();
   await browser.close();

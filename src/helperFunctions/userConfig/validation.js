@@ -1,26 +1,41 @@
 const fs = require("fs-extra");
+const path = require("path");
 
-const dirValidation = async (path) => {
-  return path && (await fs.pathExists(path));
+const dirValidation = async (dirPath) => {
+  return (
+    !!dirPath &&
+    path.isAbsolute(dirPath) &&
+    (await fs.pathExists(dirPath)) &&
+    (await fs.stat(dirPath)).isDirectory()
+  );
 };
 
-const saveDirValidation = async (path) => {
-  return await dirValidation(path);
+const ToInteger = (x) => {
+  x = Number(x);
+  return x < 0 ? Math.ceil(x) : Math.floor(x);
 };
 
-const tmpDirValidation = async (path) => {
-  return await dirValidation(path);
+const integerValidation = (x) => {
+  return x === ToInteger(x);
+};
+
+const saveDirValidation = async (dirPath) => {
+  return await dirValidation(dirPath);
+};
+
+const tmpDirValidation = async (dirPath) => {
+  return await dirValidation(dirPath);
 };
 
 const concurrencyValidation = async (concurrency) => {
-  return parseInt(concurrency, 10) && concurrency <= 6 && concurrency >= 1;
+  return integerValidation(concurrency) && concurrency <= 6 && concurrency >= 1;
 };
 
 const transferProgressTimeoutValidation = async (time) => {
-  return Number.isInteger(time) && time >= 5000;
+  return integerValidation(time) && time && time >= 5000;
 };
 
-const validation = async (userConfig) => {
+const configValidation = async (userConfig) => {
   const saveDir = userConfig.get("path.saveDir");
   const tmpDir = userConfig.get("path.tmpDir");
   const concurrency = userConfig.get("process.concurrency");
@@ -56,8 +71,10 @@ const validation = async (userConfig) => {
   return { valid: !errors.length, errors };
 };
 
-module.exports = validation;
+module.exports.configValidation = configValidation;
 module.exports.saveDirValidation = saveDirValidation;
 module.exports.tmpDirValidation = tmpDirValidation;
 module.exports.concurrencyValidation = concurrencyValidation;
 module.exports.transferProgressTimeoutValidation = transferProgressTimeoutValidation;
+module.exports.dirValidation = dirValidation;
+module.exports.integerValidation = integerValidation;

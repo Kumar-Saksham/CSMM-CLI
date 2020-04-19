@@ -28,8 +28,8 @@ class UpdateCommand extends Command {
 
     let finalItemDirectory = {};
     await promisePool(
-      installedItemsList.map(item => () => {
-        return getMetadata(item.id).then(articlesObj => {
+      installedItemsList.map((item) => () => {
+        return getMetadata(item.id).then((articlesObj) => {
           finalItemDirectory = { ...finalItemDirectory, ...articlesObj };
         });
       }),
@@ -37,7 +37,7 @@ class UpdateCommand extends Command {
     );
 
     const updatedItemDetails = Object.values(finalItemDirectory);
-    const toUpdateItemList = updatedItemDetails.filter(item => {
+    const toUpdateItemList = updatedItemDetails.filter((item) => {
       let installedUpdatedAt;
       try {
         installedUpdatedAt = new Date(installedItems[item.id].updated);
@@ -55,8 +55,11 @@ class UpdateCommand extends Command {
 
     console.log(colors.yellow("\nTOTAL ITEM COUNT:"), toUpdateItemList.length);
 
-    const logger = new Logger();
-    const seq = async article => {
+    const logger = new Logger({
+      total: toUpdateItemList.length,
+      disabled: process.env.NODE_ENV === "test",
+    });
+    const seq = async (article) => {
       try {
         logger.insert(article);
         logger.update(article.id, loggerStates.grabLink);
@@ -66,7 +69,7 @@ class UpdateCommand extends Command {
           downloadLink,
           __packedDir,
           undefined,
-          progress => {
+          (progress) => {
             logger.update(article.id, loggerStates.download, progress.percent);
           }
         );
@@ -90,7 +93,7 @@ class UpdateCommand extends Command {
     };
 
     const stats = await promisePool(
-      toUpdateItemList.map(article => () => seq(article)),
+      toUpdateItemList.map((article) => () => seq(article)),
       5
     );
 

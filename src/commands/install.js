@@ -1,5 +1,4 @@
 const { Command, flags } = require("@oclif/command");
-const path = require("path");
 const colors = require("ansi-colors");
 const Err = require("../helperFunctions/err");
 const Logger = require("../helperFunctions/logger/logger");
@@ -39,7 +38,10 @@ class InstallCommand extends Command {
     const articleList = Object.values(articleDirectory);
     console.log(colors.yellow("\nTOTAL ITEM COUNT:"), articleList.length);
 
-    const logger = new Logger({ total: articleList.length });
+    const logger = new Logger({
+      total: articleList.length,
+      disabled: process.env.NODE_ENV === "test",
+    });
     const seq = async (article) => {
       try {
         logger.insert(article);

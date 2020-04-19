@@ -41,7 +41,8 @@ const acquireDownloadLink = async id => {
     await browser.close();
     throw new Err("Unavailable on SMODS", "FAIL");
   }
-
+  
+  /* istanbul ignore next */
   const modsBaseLink = await page.$eval(".skymods-excerpt-btn", el => el.href);
 
   //RETRY modsBase PAGE LOAD

@@ -1,6 +1,7 @@
 const moment = require("moment");
 
 const parseItem = async page => {
+  /* istanbul ignore next */
   const details = await page.evaluate(() => {
     const output = {};
     output.title = document.querySelector(".workshopItemTitle").innerText;
