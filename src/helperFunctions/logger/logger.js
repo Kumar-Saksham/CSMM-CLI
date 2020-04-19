@@ -16,32 +16,40 @@ const states = {
 
 class Logger {
   constructor(options = { disabled: false }) {
-    this.actives = {};
+    this.activeOps = {};
     this.log = logUpdate.create(process.stdout, { showCursor: false });
     this.previousOutput = "";
-    this.marginWidth = termSize().columns;
-    this.barWidth = 40;
-    this.successfullyCompleted = 0;
+    this.terminalWidth = termSize().columns;
+    this.progressBarWidth = 40;
+    this.stats = {
+      success: 0,
+      fail: 0,
+      warn: 0,
+      total: options.total,
+    };
     this.totalCount = options.total;
     this.disabled = options.disabled;
   }
 
   terminatingStates = [states.success, states.warn, states.fail];
 
-  renderText(options = { margin: true }) {
-    const itemsToRender = Object.values(this.actives);
-
-    const successCounter = `${colors.yellow(
-      ` [${this.successfullyCompleted}]`
-    )}`;
-
-    const margin = `${colors.grey(
-      "━".repeat(this.marginWidth - stringLength(successCounter))
-    )}${successCounter}\n`;
-
-    return `${options.margin ? margin : ""}${itemsToRender
+  get opsToText() {
+    return Object.values(this.activeOps)
       .map((item) => this.style[item.state](item))
-      .join("\n")}`;
+      .join("\n");
+  }
+
+  get marginToText() {
+    const successCounter = `${colors.yellow(` [${this.stats.success}]`)}`;
+    return `${colors.grey(
+      "━".repeat(this.terminalWidth - stringLength(successCounter))
+    )}${successCounter}\n`;
+  }
+
+  renderText(options = { margin: true }) {
+    const marginToRender = options.margin ? this.marginToText : "";
+    const opsToRender = this.opsToText;
+    return `${marginToRender}${opsToRender}`;
   }
 
   style = {
@@ -51,60 +59,70 @@ class Logger {
     DOWNLOAD: (item) => {
       return `${item.title}: |${colors.green(
         "#".repeat(item.progress)
-      )}${colors.dim("-".repeat(this.barWidth - item.progress))}|`;
+      )}${colors.dim("-".repeat(this.progressBarWidth - item.progress))}|`;
     },
     INSTALL: (item) => `${item.title}: ${colors.magenta("INSTALLING...")}`,
     SUCCESS: (item) => `[${colors.green(figures.tick)}] ${item.title}`,
     WARN: (item) =>
       `[${colors.yellow("!")}] ${item.title} ${colors.yellow(item.message)}`,
     FAIL: (item) =>
-      `[${colors.red("x")}] ${item.title} ${colors.red(
-        item.message
-      )}`,
+      `[${colors.red("x")}] ${item.title} ${colors.red(item.message)}`,
   };
 
   insert(item) {
-    this.actives[item.id] = {
+    this.activeOps[item.id] = {
       title: item.title,
       state: states.start,
       progress: 0,
       message: "",
     };
-    //this.render();
   }
 
   remove(id) {
-    const itemToDelete = this.actives[id];
-    delete this.actives[id];
-    const activesBackup = this.actives;
-    this.actives = [itemToDelete];
+    const itemToDelete = this.activeOps[id];
+    delete this.activeOps[id];
+    const activesBackup = this.activeOps;
+    this.activeOps = [itemToDelete];
     this.render({ margin: false });
     this.log.done();
     this.log = logUpdate.create(process.stderr, { showCursor: false });
-    this.actives = activesBackup;
+    this.activeOps = activesBackup;
     this.render();
-    //console.log(this.style[itemToDelete.state](itemToDelete));
+  }
+
+  updateStats(state) {
+    switch (state) {
+      case states.success:
+        this.stats.success++;
+        break;
+      case states.warn:
+        this.stats.warn++;
+        break;
+      case states.fail:
+        this.stats.fail++;
+        break;
+      default:
+    }
   }
 
   update(id, state, progress, message = "") {
-    const itemToUpdate = this.actives[id];
+    const itemToUpdate = this.activeOps[id];
     itemToUpdate.state = state;
 
     if (this.terminatingStates.includes(state)) {
-      if (state === states.success) {
-        this.successfullyCompleted++;
-      }
+      this.updateStats(state);
       itemToUpdate.message = message;
       this.remove(id);
     }
 
     if (progress) {
-      const newProgressValue = Math.floor(progress * this.barWidth);
+      const newProgressValue = Math.floor(progress * this.progressBarWidth);
       if (newProgressValue === itemToUpdate.progress) {
         return;
       }
       itemToUpdate.progress = newProgressValue;
     }
+
     this.render();
   }
 

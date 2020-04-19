@@ -19,7 +19,7 @@ const promisePool = async (operationList, maxFlow = 5) => {
         stats.successfull++;
       })
       .catch(error => {
-        console.log(colors.red("Caught by Pool"), error);
+        //console.log(colors.red("Caught by Pool"), error);
         stats.retries++;
         operationListCopy.push(operationOfPromise);
       })

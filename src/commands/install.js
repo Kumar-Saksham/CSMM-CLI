@@ -94,13 +94,16 @@ class InstallCommand extends Command {
     );
 
     const timeTaken = process.hrtime(startTime);
-    stats.time = timeTaken;
+    const loggerStats = logger.stats;
+
     console.log(
-      `${colors.green(stats.successfull)}${colors.dim(
-        `/${stats.total}`
-      )} completed with ${colors.yellow(
-        stats.retries
-      )} retries in ${colors.blue(`${stats.time[0]}s`)}`
+      `${colors.green(loggerStats.success)}${colors.dim(
+        `/${loggerStats.total || "total"}`
+      )} installed with ${colors.yellow(
+        loggerStats.warn
+      )} retries and ${colors.red(loggerStats.fail)} failures in ${colors.blue(
+        `${timeTaken[0]}s`
+      )}`
     );
 
     //setTimeout(() => nodeChecker(), 1000);
