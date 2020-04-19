@@ -22,6 +22,7 @@
     "got": "^10.7.0",
     "log-update": "^4.0.0",
     "moment": "^2.24.0",
+    "pretty-time": "^1.1.0",
     "puppeteer": "^2.1.1",
     "sinon": "^9.0.2",
     "string-length": "^4.0.1",
