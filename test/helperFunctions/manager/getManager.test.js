@@ -9,11 +9,7 @@ describe("getManager", () => {
       global.testUserConfig.path.saveDir,
       "manager.json"
     );
-    this.managerBackup = await fs.readJSON(this.managerPath);
-  });
-  after(async () => {
     await fs.ensureFile(this.managerPath);
-    await fs.writeJSON(this.managerPath, this.managerBackup);
   });
 
   let sampleManagerData = {

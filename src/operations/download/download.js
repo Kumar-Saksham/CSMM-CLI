@@ -30,7 +30,7 @@ const download = (url, directory, filename, onProgress) => {
           const noProgressTimeout = 5000;
 
           downloadStream.on("downloadProgress", (progress) => {
-            if (noProgressTimer) clearImmediate(noProgressTimer);
+            if (noProgressTimer) clearTimeout(noProgressTimer);
             onProgress(progress);
             noProgressTimer = setTimeout(() => {
               try {
@@ -48,9 +48,9 @@ const download = (url, directory, filename, onProgress) => {
           //downloading
           try {
             await pipeline(downloadStream, fileWriteStream);
-            clearInterval(noProgressTimer);
+            clearTimeout(noProgressTimer);
           } catch (e) {
-            clearInterval(noProgressTimer);
+            clearTimeout(noProgressTimer);
             await fs.remove(fileLink);
             reject(Error("Download Stuck"));
           }

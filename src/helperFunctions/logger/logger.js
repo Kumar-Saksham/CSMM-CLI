@@ -15,14 +15,15 @@ const states = {
 };
 
 class Logger {
-  constructor(options = {}) {
+  constructor(options = { disabled: false }) {
     this.actives = {};
-    this.log = logUpdate.create(process.stderr, { showCursor: false });
+    this.log = logUpdate.create(process.stdout, { showCursor: false });
     this.previousOutput = "";
     this.marginWidth = termSize().columns;
     this.barWidth = 40;
     this.successfullyCompleted = 0;
     this.totalCount = options.total;
+    this.disabled = options.disabled;
   }
 
   terminatingStates = [states.success, states.warn, states.fail];
@@ -55,9 +56,7 @@ class Logger {
     INSTALL: (item) => `${item.title}: ${colors.magenta("INSTALLING...")}`,
     SUCCESS: (item) => `[${colors.green(figures.tick)}] ${item.title}`,
     WARN: (item) =>
-      `[${colors.yellow("!")}] ${item.title} ${colors.yellow(
-        item.message
-      )}`,
+      `[${colors.yellow("!")}] ${item.title} ${colors.yellow(item.message)}`,
     FAIL: (item) =>
       `[${colors.red(figures.cross)}] ${item.title} ${colors.red(
         item.message
@@ -110,9 +109,11 @@ class Logger {
   }
 
   render(options) {
-    const output = this.renderText(options);
-    this.log(output);
-    this.previousOutput = output;
+    if (!this.disabled) {
+      const output = this.renderText(options);
+      this.log(output);
+      this.previousOutput = output;
+    }
   }
 }
 

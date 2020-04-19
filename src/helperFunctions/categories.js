@@ -92,4 +92,4 @@ const new_categories = (cat) => {
 };
 
 module.exports = new_categories;
-module.exports.old_categories = old_categories;
+module.exports.hard = old_categories;

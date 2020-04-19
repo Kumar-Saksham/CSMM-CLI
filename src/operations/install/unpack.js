@@ -23,18 +23,22 @@ const unzip = async (source, destination) => {
   const zip = new Zip(source);
   let outputDirectory;
 
-  zip.extractAllTo(destination, true);
+  //zip.extractAllTo(destination, true);
   const entries = zip.getEntries();
 
   for (entry of entries) {
-    if (!outputDirectory) {
+    if (!entry.isDirectory) {
       const regex = /[/|(\\|\\\\)]/;
       const allDirs = entry.entryName.split(regex);
+      entry.entryName = allDirs.join("/");
       if (allDirs.length <= 1) continue;
-      outputDirectory = allDirs[0];
-      if (outputDirectory) break;
+      if (!outputDirectory) {
+        outputDirectory = allDirs[0];
+      }
     }
   }
+
+  zip.extractAllTo(destination);
 
   return path.join(destination, outputDirectory);
 };
