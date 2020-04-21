@@ -9,6 +9,7 @@ const download = require("../operations/download/download");
 const installItem = require("../operations/install/install");
 const promisePool = require("../helperFunctions/promisePool");
 const getMetadata = require("../operations/getMetadata/getMetadata");
+const summary = require("../helperFunctions/summary");
 
 //const nodeChecker = require("why-is-node-running");
 
@@ -88,23 +89,19 @@ class InstallCommand extends Command {
       }
     };
 
-    const stats = await promisePool(
+    await promisePool(
       articleList.map((article) => () => seq(article)),
       __concurrencyLimit
     );
 
     const timeTaken = process.hrtime(startTime);
-    const loggerStats = logger.stats;
+    const stats = {
+      ...logger.stats,
+      time: timeTaken,
+      successWrd: "installed",
+    };
 
-    console.log(
-      `${colors.green(loggerStats.success)}${colors.dim(
-        `/${loggerStats.total || "total"}`
-      )} installed with ${colors.yellow(
-        loggerStats.warn
-      )} retries and ${colors.red(loggerStats.fail)} failures in ${colors.blue(
-        `${timeTaken[0]}s`
-      )}`
-    );
+    console.log(summary(stats));
 
     //setTimeout(() => nodeChecker(), 1000);
   }
