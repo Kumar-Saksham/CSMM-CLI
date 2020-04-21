@@ -29,9 +29,10 @@ describe("defaultUserConfig", () => {
       });
 
     test
+      .env({ LOCALAPPDATA: undefined })
       .stub(process, "platform", "linux")
       .stub(process, "env.HOME", "/Users/username/")
-      .it("should give cities: skylines mac home dir on linux", () => {
+      .it("should give cities: skylines linux home dir on linux", () => {
         const originalPlatform = Object.getOwnPropertyDescriptor(
           process,
           "platform"

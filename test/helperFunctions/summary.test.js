@@ -2,7 +2,7 @@ const { test, expect } = require("@oclif/test");
 const summary = require("../../src/helperFunctions/summary");
 const colors = require("ansi-colors");
 
-describe.only("summary", () => {
+describe("summary", () => {
   const completeStats = {
     total: 10,
     success: 8,
