@@ -74,9 +74,9 @@ const setupConfig = async (
   });
 
   try {
+    const concurrency = await concurrencyPrompt.run();
     const saveDir = await saveDirPrompt.run();
     const tmpDir = await tmpFolderPrompt.run();
-    const concurrency = await concurrencyPrompt.run();
 
     userConfig.set({
       ...userConfig.store,
