@@ -85,17 +85,18 @@ class UpdateCommand extends Command {
 
         logger.update(article.id, loggerStates.success);
       } catch (e) {
-        logger.update(article.id, loggerStates.fail, null, e.message);
         if (e.type === "FAIL") {
+          logger.update(article.id, loggerStates.fail, null, e.message);
           return Promise.resolve();
         }
-        return Promise.reject(e.message);
+        logger.update(article.id, loggerStates.warn, null, e.message);
+        return Promise.reject(e);
       }
     };
 
     await promisePool(
       toUpdateItemList.map((article) => () => seq(article)),
-      5
+      __concurrencyLimit
     );
 
     const timeTaken = process.hrtime(startTime);
