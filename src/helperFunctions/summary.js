@@ -9,13 +9,33 @@ const summary = (stats) => {
   this.time = stats.time;
   this.successWrd = stats.successWrd;
 
-  return `${colors.green(this.success)}${colors.grey(
-    `/${this.total || "total"}`
-  )} ${this.successWrd} with ${colors.yellow(this.warn)} ${
+  const succStr = `${colors.green(this.success)}${
+    this.total ? colors.grey(`/${this.total}`) : ""
+  } ${this.successWrd} `;
+
+  const retryStr = `${colors.yellow(this.warn)} ${
     this.warn === 1 ? "retry" : "retries"
-  } and ${colors.red(this.fail)} ${
+  }`;
+
+  const failStr = `${colors.red(this.fail)} ${
     this.fail === 1 ? "failure" : "failures"
-  } in ${colors.blue(pretty(this.time, "s"))}`;
+  }`;
+
+  const timeStr = this.time ? `in ${colors.blue(pretty(this.time, "s"))} ` : "";
+
+  const extrasStr = `${
+    this.fail !== undefined || this.warn !== undefined
+      ? `with ${
+          this.warn !== undefined && this.fail !== undefined
+            ? `${retryStr} and ${failStr}`
+            : `${this.warn !== undefined ? retryStr : failStr}`
+        } `
+      : ""
+  }`;
+
+  const fullStr = `${succStr}${extrasStr}${timeStr}`;
+
+  return fullStr;
 };
 
 module.exports = summary;

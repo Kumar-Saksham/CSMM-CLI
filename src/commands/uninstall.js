@@ -3,6 +3,7 @@ const colors = require("ansi-colors");
 const { AutoComplete } = require("enquirer");
 const deleteItem = require("../operations/delete/deleteItem");
 const getManager = require("../helperFunctions/manager/getManager");
+const summary = require("../helperFunctions/summary");
 
 class UninstallCommand extends Command {
   async run() {
@@ -38,12 +39,12 @@ class UninstallCommand extends Command {
       styles: { em: colors.yellow.inverse },
       choices: [
         { role: "separator" },
-        ...itemInstalled.map(item => {
+        ...itemInstalled.map((item) => {
           return {
             name: item.title,
-            value: item
+            value: item,
           };
-        })
+        }),
       ],
       multiple: true,
       format() {
@@ -65,7 +66,7 @@ class UninstallCommand extends Command {
       },
       result(titles) {
         return this.map(titles);
-      }
+      },
     });
 
     let results;
@@ -78,7 +79,9 @@ class UninstallCommand extends Command {
 
     const initTime = process.hrtime();
     const itemsToDelete = Object.values(results);
-    let deletedCount = 0;
+    let deletedCount = 0,
+      failedToDeleteCount = 0,
+      totalCount = itemsToDelete.length;
     for (const item of itemsToDelete) {
       try {
         const deletedItem = await deleteItem(item.id);
@@ -86,13 +89,18 @@ class UninstallCommand extends Command {
         deletedCount++;
       } catch (e) {
         console.log(colors.red(`Error Uninstalling ${item.title}:`), e.message);
+        failedToDeleteCount++;
       }
     }
     const endTime = process.hrtime(initTime);
     console.log(
-      `${colors.red(deletedCount)} item(s) deleted in ${colors.blue(
-        `${endTime[0] + (endTime[1] / 1000000000).toFixed(3)}s`
-      )}`
+      summary({
+        success: deletedCount,
+        fail: failedToDeleteCount,
+        total: totalCount,
+        time: endTime,
+        successWrd: "deleted",
+      })
     );
   }
 }
@@ -100,7 +108,7 @@ class UninstallCommand extends Command {
 UninstallCommand.description = `Uninstall an item`;
 
 UninstallCommand.args = [
-  { name: "steamId", description: "SteamID of installed item" }
+  { name: "steamId", description: "SteamID of installed item" },
 ];
 
 module.exports = UninstallCommand;

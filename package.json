@@ -70,7 +70,7 @@
   "scripts": {
     "postpack": "rm -f oclif.manifest.json",
     "prepack": "oclif-dev manifest",
-    "test": "nyc mocha --forbid-only \"test/**/*.test.js\"",
+    "test": "nyc mocha \"test/**/*.test.js\"",
     "version": "oclif-dev readme && git add README.md"
   }
 }

@@ -9,6 +9,7 @@ const installItem = require("../operations/install/install");
 const promisePool = require("../helperFunctions/promisePool");
 const Logger = require("../helperFunctions/logger/logger");
 const loggerStates = Logger.states;
+const summary = require("../helperFunctions/summary");
 
 class UpdateCommand extends Command {
   async run() {
@@ -92,20 +93,18 @@ class UpdateCommand extends Command {
       }
     };
 
-    const stats = await promisePool(
+    await promisePool(
       toUpdateItemList.map((article) => () => seq(article)),
       5
     );
 
     const timeTaken = process.hrtime(startTime);
-    stats.time = timeTaken;
-    console.log(
-      `${colors.green(stats.successfull)}${colors.dim(
-        `/${stats.total}`
-      )} completed with ${colors.yellow(
-        stats.retries
-      )} retries in ${colors.blue(`${stats.time[0]}s`)}`
-    );
+    const stats = {
+      ...logger.stats,
+      time: timeTaken,
+      successWrd: "updated",
+    };
+    console.log(summary(stats));
   }
 }
 

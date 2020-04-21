@@ -89,19 +89,19 @@ class InstallCommand extends Command {
       }
     };
 
-    const stats = await promisePool(
+    await promisePool(
       articleList.map((article) => () => seq(article)),
       __concurrencyLimit
     );
 
     const timeTaken = process.hrtime(startTime);
-    const loggerStats = {
+    const stats = {
       ...logger.stats,
       time: timeTaken,
       successWrd: "installed",
     };
 
-    console.log(summary(loggerStats));
+    console.log(summary(stats));
 
     //setTimeout(() => nodeChecker(), 1000);
   }
