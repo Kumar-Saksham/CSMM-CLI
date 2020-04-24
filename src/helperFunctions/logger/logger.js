@@ -34,7 +34,7 @@ class Logger {
     this.setupTables();
     this.renderInterval = setInterval(() => {
       this.render();
-    }, 100);
+    }, 80);
   }
 
   terminatingStates = [states.success, states.warn, states.fail];

@@ -1,15 +1,19 @@
 <!-- omit in toc -->
-# CSMM-CLI
+<h1 align="center">CSMM-CLI</h1>
 
-Mod manager for Cities: Skylines.
+<h6 align="center">Mod manager for Cities: Skylines.</h6>
 
+<p align="center">
+<img src="./demo/demo.svg" width="700"/>
+</p>
+
+<p align="center">
 [![Version](https://img.shields.io/npm/v/csmm-cli?style=flat-square)](https://npmjs.com/package/csmm-cli)
 [![Downloads/week](https://img.shields.io/npm/dt/csmm-cli?style=flat-square)](https://www.npmjs.com/package/csmm-cli)
 [![License](https://img.shields.io/npm/l/csmm-cli?style=flat-square)](https://github.com/Kumar-Saksham/CSMM-CLI/blob/master/package.json)
-
-<p align="center">
-<img src="./demo/installCollection.gif" width="700"/>
 </p>
+
+
 
 <!-- omit in toc -->
 ## Description

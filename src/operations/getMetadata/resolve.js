@@ -90,7 +90,7 @@ const articleResolver = async (
 
     console.log(
       colors.yellow("Grabbing rest of the details"),
-      `${colors.grey("(It's not stuck, big collections can take a while)")}`
+      `${colors.grey("(this may take a while)")}`
     );
 
     await promisePool(
