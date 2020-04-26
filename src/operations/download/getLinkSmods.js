@@ -34,14 +34,15 @@ const acquireDownloadLink = async id => {
 
   if (!modExists) {
     await page.screenshot({
-      path: path.join(__logsFolder, "SMODS-mod-unavailable.png"),
+      path: path.join(__logDir, "SMODS-mod-unavailable.png"),
       fullPage: true
     });
     await page.close();
     await browser.close();
     throw new Err("Unavailable on SMODS", "FAIL");
   }
-
+  
+  /* istanbul ignore next */
   const modsBaseLink = await page.$eval(".skymods-excerpt-btn", el => el.href);
 
   //RETRY modsBase PAGE LOAD
@@ -66,7 +67,7 @@ const acquireDownloadLink = async id => {
   const downloadButtonExists = await page.$("input.download-file-btn");
   if (!downloadButtonExists) {
     await page.screenshot({
-      path: path.join(__logsFolder, "MODSBASE-mod-removed.png"),
+      path: path.join(__logDir, "MODSBASE-mod-removed.png"),
       fullPage: true
     });
     await page.close();

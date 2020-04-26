@@ -7,3 +7,5 @@
 /yarn.lock
 node_modules
 .vscode
+.editorconfig
+.DS_Store

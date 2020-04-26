@@ -9,6 +9,7 @@ const installItem = require("../operations/install/install");
 const promisePool = require("../helperFunctions/promisePool");
 const Logger = require("../helperFunctions/logger/logger");
 const loggerStates = Logger.states;
+const summary = require("../helperFunctions/summary");
 
 class UpdateCommand extends Command {
   async run() {
@@ -28,8 +29,8 @@ class UpdateCommand extends Command {
 
     let finalItemDirectory = {};
     await promisePool(
-      installedItemsList.map(item => () => {
-        return getMetadata(item.id).then(articlesObj => {
+      installedItemsList.map((item) => () => {
+        return getMetadata(item.id).then((articlesObj) => {
           finalItemDirectory = { ...finalItemDirectory, ...articlesObj };
         });
       }),
@@ -37,7 +38,7 @@ class UpdateCommand extends Command {
     );
 
     const updatedItemDetails = Object.values(finalItemDirectory);
-    const toUpdateItemList = updatedItemDetails.filter(item => {
+    const toUpdateItemList = updatedItemDetails.filter((item) => {
       let installedUpdatedAt;
       try {
         installedUpdatedAt = new Date(installedItems[item.id].updated);
@@ -55,8 +56,11 @@ class UpdateCommand extends Command {
 
     console.log(colors.yellow("\nTOTAL ITEM COUNT:"), toUpdateItemList.length);
 
-    const logger = new Logger();
-    const seq = async article => {
+    const logger = new Logger({
+      total: toUpdateItemList.length,
+      disabled: process.env.NODE_ENV === "test",
+    });
+    const seq = async (article) => {
       try {
         logger.insert(article);
         logger.update(article.id, loggerStates.grabLink);
@@ -64,9 +68,9 @@ class UpdateCommand extends Command {
 
         const downloadedFilePath = await download(
           downloadLink,
-          path.join(__tempFolder, "packed"),
+          __packedDir,
           undefined,
-          progress => {
+          (progress) => {
             logger.update(article.id, loggerStates.download, progress.percent);
           }
         );
@@ -81,28 +85,27 @@ class UpdateCommand extends Command {
 
         logger.update(article.id, loggerStates.success);
       } catch (e) {
-        logger.update(article.id, loggerStates.fail, null, e.message);
         if (e.type === "FAIL") {
+          logger.update(article.id, loggerStates.fail, null, e.message);
           return Promise.resolve();
         }
-        return Promise.reject(e.message);
+        logger.update(article.id, loggerStates.warn, null, e.message);
+        return Promise.reject(e);
       }
     };
 
-    const stats = await promisePool(
-      toUpdateItemList.map(article => () => seq(article)),
-      5
+    await promisePool(
+      toUpdateItemList.map((article) => () => seq(article)),
+      __concurrencyLimit
     );
 
     const timeTaken = process.hrtime(startTime);
-    stats.time = timeTaken;
-    console.log(
-      `${colors.green(stats.successfull)}${colors.dim(
-        `/${stats.total}`
-      )} completed with ${colors.yellow(
-        stats.retries
-      )} retries in ${colors.blue(`${stats.time[0]}s`)}`
-    );
+    const stats = {
+      ...logger.stats,
+      time: timeTaken,
+      successWrd: "updated",
+    };
+    console.log(summary(stats));
   }
 }
 

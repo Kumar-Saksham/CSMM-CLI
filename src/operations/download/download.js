@@ -4,18 +4,19 @@ const path = require("path");
 const { promisify } = require("util");
 const uuid = require("uuid").v4;
 const got = require("got");
-const parseURL = require("../../helperFunctions/parseURL");
+const parseFileUrl = require("../../helperFunctions/parseFileUrl");
+const Err = require("../../helperFunctions/err");
 
 const pipeline = promisify(stream.pipeline);
 
 const download = (url, directory, filename, onProgress) => {
-  const fromURL = parseURL(url);
+  const fromURL = parseFileUrl(url);
   filename = `${filename || uuid()}${fromURL.extension}`;
 
   return new Promise((resolve, reject) => {
     const downloadStream = got
       .stream(url)
-      .on("response", async response => {
+      .on("response", async (response) => {
         if (!response.headers["content-type"].includes("application")) {
           //Not a file
           let completeResponse = "";
@@ -23,14 +24,14 @@ const download = (url, directory, filename, onProgress) => {
             completeResponse += chunk;
           }
 
-          reject(completeResponse);
+          reject(new Err(`Not a file: ${completeResponse}`, "FAIL"));
         } else {
           //valid file
           let noProgressTimer;
           const noProgressTimeout = 5000;
 
-          downloadStream.on("downloadProgress", progress => {
-            if (noProgressTimer) clearImmediate(noProgressTimer);
+          downloadStream.on("downloadProgress", (progress) => {
+            if (noProgressTimer) clearTimeout(noProgressTimer);
             onProgress(progress);
             noProgressTimer = setTimeout(() => {
               try {
@@ -48,16 +49,16 @@ const download = (url, directory, filename, onProgress) => {
           //downloading
           try {
             await pipeline(downloadStream, fileWriteStream);
-            clearInterval(noProgressTimer);
+            clearTimeout(noProgressTimer);
           } catch (e) {
-            clearInterval(noProgressTimer);
+            clearTimeout(noProgressTimer);
             await fs.remove(fileLink);
             reject(Error("Download Stuck"));
           }
           resolve(fileLink);
         }
       })
-      .on("error", e => {
+      .on("error", (e) => {
         reject(e);
       });
   });

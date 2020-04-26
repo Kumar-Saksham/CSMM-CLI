@@ -1,3 +1,9 @@
 --recursive
 --reporter spec
 --timeout 5000
+
+# setup
+--file ./test/setup/mocha.env
+--file ./test/setup/testUserConfig.js
+
+# teardown

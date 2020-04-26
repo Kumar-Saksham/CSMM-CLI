@@ -20,6 +20,7 @@ const articleResolver = async (
   await retry(
     async () => {
       await page.goto(url, { waitUntil: "networkidle2" });
+      /* istanbul ignore next */
       await page.waitForFunction(
         () => {
           return (
@@ -30,7 +31,7 @@ const articleResolver = async (
         { timeout: 20000 }
       );
     },
-    async () => {
+    async (e) => {
       await page.close();
       page = await getPage(browser);
     },
@@ -45,7 +46,7 @@ const articleResolver = async (
           console.log("EXITING...");
           await page.close();
           process.exit();
-        }
+        },
       };
       const message = "Unable to load steam page. Choose one:";
       await choose(message, options);
@@ -55,10 +56,11 @@ const articleResolver = async (
 
   if (await page.$(".error_ctn")) {
     await page.close();
-    throw new Err("No such page found.", "FAIL");
+    throw new Err("No such item found.", "FAIL");
   }
 
-  const breadcrumbs = await page.$eval(".breadcrumbs", str => {
+  /* istanbul ignore next */
+  const breadcrumbs = await page.$eval(".breadcrumbs", (str) => {
     return str.innerText.toLowerCase();
   });
 
@@ -88,11 +90,11 @@ const articleResolver = async (
 
     console.log(
       colors.yellow("Grabbing rest of the details"),
-      `${colors.grey("(It's not stuck, big collections can take a while)")}`
+      `${colors.grey("(this may take a while)")}`
     );
 
     await promisePool(
-      res.map(item => () => {
+      res.map((item) => () => {
         return articleResolver(item.id, finalItemDirectory, browser);
       }),
       8

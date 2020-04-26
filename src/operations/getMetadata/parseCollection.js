@@ -1,4 +1,5 @@
 const parseCollection = async page => {
+  /* istanbul ignore next */
   const details = await page.evaluate(() => {
     const output = {};
 

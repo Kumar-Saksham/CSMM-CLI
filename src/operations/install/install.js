@@ -2,43 +2,34 @@ const fs = require("fs-extra");
 const path = require("path");
 const unpack = require("./unpack");
 const getManager = require("../../helperFunctions/manager/getManager");
-const locationOf = require("./categoryLocation");
-
-// const lastDir = link => {
-//   let dirs = link.split("/");
-//   const lastDir = dirs[dirs.length - 1].trim().length
-//     ? dirs[dirs.length - 1]
-//     : dirs[dirs.length - 2];
-//   return lastDir.trim();
-// };
-
-const capitalSnakeCase = str => {
-  return str
-    .match(/[a-zA-Z]+/g)
-    .join("_")
-    .toUpperCase();
-};
+const relativePathOf = require("./categoryLocation");
+const Err = require("../../helperFunctions/err");
 
 const installer = async (article, downloadedFilePath) => {
   const manager = await getManager();
-  const unpackedDir = path.join(__tempFolder, "unpacked");
-  const unpackedItemDir = await unpack(downloadedFilePath, unpackedDir);
 
-  const jsonContent = JSON.stringify(article);
+  const unpackedDir = __unpackedDir;
+  let unpackedItemDir;
+  try {
+    unpackedItemDir = await unpack(downloadedFilePath, unpackedDir);
+  } catch (e) {
+    throw new Err(e.message, "FAIL");
+  }
 
   const itemFileLink = path.join(unpackedItemDir, "item.json");
   await fs.ensureFile(itemFileLink);
-  await fs.writeFile(itemFileLink, jsonContent);
+  await fs.writeJSON(itemFileLink, article);
 
-  const category = capitalSnakeCase(article.categories[0]);
+  const installLocation = path.join(
+    __saveDir,
+    relativePathOf(article.categories[0]),
+    article.id
+  );
 
-  const installLocation = path.join(locationOf(category), article.id);
-
-  //await fs.ensureDir(installLocation);
   try {
     await fs.move(unpackedItemDir, installLocation, { overwrite: true });
   } catch {
-    throw new Error("ERROR WHILE MOVING");
+    throw new Err("ERROR WHILE MOVING", "FAIL");
   }
 
   manager.set({
@@ -48,9 +39,9 @@ const installer = async (article, downloadedFilePath) => {
         title: article.title,
         updated: article.updated,
         location: installLocation,
-        id: article.id
-      }
-    }
+        id: article.id,
+      },
+    },
   });
 };
 
