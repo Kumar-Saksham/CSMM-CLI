@@ -28,7 +28,7 @@ const installer = async (article, downloadedFilePath) => {
 
   try {
     await fs.move(unpackedItemDir, installLocation, { overwrite: true });
-  } catch {
+  } catch(e) {
     throw new Err("ERROR WHILE MOVING", "FAIL");
   }
 

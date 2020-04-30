@@ -42,7 +42,7 @@ class UpdateCommand extends Command {
       let installedUpdatedAt;
       try {
         installedUpdatedAt = new Date(installedItems[item.id].updated);
-      } catch {
+      } catch(e) {
         return true;
       }
       const freshUpdatedAt = new Date(item.updated);
