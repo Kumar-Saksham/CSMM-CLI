@@ -11,7 +11,7 @@ module.exports = (url) => {
 
     const possibleExtension = filename.match(/(.[a-zA-Z]+)$/);
     extension = possibleExtension ? possibleExtension[0] : "";
-  } catch {
+  } catch(e) {
     filename = null;
     id = null;
     extension = null;
