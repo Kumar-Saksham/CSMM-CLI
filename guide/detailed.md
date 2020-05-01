@@ -243,10 +243,9 @@ once you run the command with the `-e` flag from your terminal, it will ask you 
 
 Use arrow keys to highlight the prefferred option and then press enter (return).
 
-You'll be presented with a list of items to select from, here you can use `UP` / `DOWN` arrow key to move the selector and press `SPACE` to select the items, once you are satisfied with the selection press `ENTER` or `RETURN` key.
+You'll be presented with a list of items to select from, here you can use `UP` / `DOWN` arrow key to move the selector and press `SPACE` to select and deselect the items, once you are satisfied with the selection press `ENTER` or `RETURN` key.
 
-<a id="listExample"></a>
-Something like this
+#### Something like this
 
 <p align="center">
 <img alt="Editing collection example" src="./images/collectionEE.png" width="700" />
@@ -275,9 +274,7 @@ This `+`, `-`, scheme is followed no matter which options you chose from
 - select to keep
 - select to ignore
 
-but the appearance of seleced items may change.
-
-Once you press `ENTER` or `RETURN` after selection `csmm-cli` will install all the selected items.
+but the appearance of selected items is different in both of them. In `select to keep` the selected items turn green to show that they'll be installed. Whereas in `select to ignore` the selected items turn red to show that they won't be installed.
 
 #### Change install method
 
@@ -309,7 +306,7 @@ is exaclty same as
 csmm install 1625704117
 ```
 
-So, you don't have to put `-m STEAM` everytime.
+So, you don't have to put `-m STEAM` every time you install something.
 
 Installing mods from `STEAM` or `SMODS` have no difference in their working and will not duplicate in case you install them using both methods. Install command always replaces the mod if previously installed.
 
@@ -334,7 +331,7 @@ You can uninstall mods using 2 ways:
 
 #### Uninstall a single item
 
-*This is **not** the preferred way of uninstalling items, use [`Uninstall multiple items`](dfsfs) instead*
+*This is **not** the preferred way of uninstalling items, use [Uninstall multiple items](#uninstall-multiple-items) instead. (You can uninstall single item with it too)*
 
 To uninstall a single item you'll require it's **id** (same id we installed it with).
 
@@ -358,9 +355,9 @@ To uninstall multiple items you can use the uninstall command (without any id)
 csmm uninstall
 ```
 
-Using this command in your terminal will present a list, this list shows all the installed items. You can move through the list using `UP`/`DOWN` arrow keys. Select all the items you wish to uninstall using `SPACE` key. Once you have selected all of the items you wish to uninstall press `ENTER` or `RETURN`.
+Using this command in your terminal will present a list, this list shows all of the installed items. You can move through the list using `UP`/`DOWN` arrow keys. Select all the items you wish to uninstall using `SPACE` key. Once you have selected all of the items you wish to uninstall press `ENTER` or `RETURN`.
 
-The list works very similar to how it works in the [editing collection part](#listExample). So, I won't be going into too much detail.
+The list works very similar to how it works in [editing collection](#something-like-this). So, I won't be going into too much detail.
 
 Once you press `ENTER` or `RETURN` all the selected items will be removed.
 

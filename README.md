@@ -70,7 +70,7 @@ When you run the CLI for the first time it will ask you a few configuration ques
 * *`Max Concurrent Tasks`*: Maximum no. of simultaneous downloads or fetching.
 
 * *`Saves Directory`*: Your Cities: Skylines [user path](https://skylines.paradoxwikis.com/User_path).
-* *`Temperory Downloads Folder`*: Folder to store temperory downloads.
+* *`Temporary Downloads Folder`*: Folder to store temporary downloads.
 
 If the pre-filled details are correct, just press enter (or return) otherwise you can fill in your own custom details.
 
@@ -115,7 +115,7 @@ ARGUMENTS
   steamId (Optional)           steamId of installed item
 ```
 
-Use command with `<steamId>` to uninstall single mod. Executing command without `<steamId>` will provide an interactive list to uninstall multiple items at once.
+Use the command with `<steamId>` to uninstall a single mod. Executing command without `<steamId>` will provide an interactive list to uninstall multiple items at once.
 
 <!-- omit in toc -->
 ## `csmm update`
@@ -144,7 +144,7 @@ Re-run configuration setup, to modify :
 
 * *`Max Concurrent Tasks`*
 * *`Saves Directory`*
-* *`Temperory Downloads Folder`*
+* *`Temporary Downloads Folder`*
 
 ```
 $ csmm config
@@ -173,10 +173,16 @@ OPTIONS
 
 ## FAQ
 
-* **Y SO EMPTY?**
-  * Havn't got many questions yet :) Feel free to ask though.
+* **Is there a detailed guide on how to use this?**
+  * Yes, [here](guide/detailed.md)
+* **I am having a lot of `BAD FILE` failures while installing mods.**
+  * The **`BAD FILE`** error usually happens because the downloaded file is corrupt or empty. This can be fixed by changing the method of installation to `SMODS`. Go through the [guide](guide/detailed.md) on how to do it.
+* **Some of the items keep failing repeatedly with `[!]` symbol, and the script doesn't end.**
+  * This is a known bug, which will be fixed later. For now, if the script seems to be stuck in a loop, giving `[!]` symbol for the same item repeatedly, use `ctrl + c` to terminate the script.
+* **Which terminal are you using?**
+  * I'm using [Hyper](https://hyper.is/), with zsh.
 
 ## License
 
-- **[MIT license](./LICENSE)**
-- Copyright 2020 © Kumar-Saksham.
+* **[MIT license](./LICENSE)**
+* Copyright 2020 © Kumar-Saksham.
