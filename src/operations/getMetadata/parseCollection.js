@@ -1,27 +1,45 @@
-const parseCollection = async page => {
+const parseCollection = async (page) => {
   /* istanbul ignore next */
   const details = await page.evaluate(() => {
     const output = {};
 
-    output.title = document
-      .querySelector(".collectionHeader .workshopItemTitle")
-      .innerText.trim();
+    try {
+      output.title = document
+        .querySelector(".collectionHeader .workshopItemTitle")
+        .innerText.trim();
+    } catch (e) {
+      output.title = "UNKNOWN_COLLECTION_TITLE";
+    }
 
-    output.author = document
-      .querySelector(".creatorsBlock .linkAuthor")
-      .innerText.trim();
+    try {
+      output.author = document
+        .querySelector(".creatorsBlock .linkAuthor")
+        .innerText.trim();
+    } catch (e) {
+      output.author = "UNKNOWN_COLLECTION_AUTHOR";
+    }
 
     output.collectionItems = Array.apply(
       null,
       document.querySelectorAll(".collectionChildren .collectionItem")
-    ).map(item => {
-      id = item.id.split("_")[1];
-      title = item.children[2].children[0].text.trim();
-      author = item.children[2].children[1].children[0].innerText.trim();
+    ).map((item) => {
+      const id = item.id.split("_")[1];
+      let title, author;
+      try {
+        title = item.children[2].children[0].text.trim();
+      } catch (e) {
+        title = "UNKNOWN_COLLECTION_ITEM_TITLE";
+      }
+      try {
+        author = item.children[2].children[1].children[0].innerText.trim();
+      } catch (e) {
+        author = "UNKNOWN_COLLECTION_ITEM_AUTHOR";
+      }
+      
       return {
         id,
         title,
-        author
+        author,
       };
     });
 
@@ -30,14 +48,14 @@ const parseCollection = async page => {
       document.querySelectorAll(
         ".rightSectionHolder:last-child .detailsStatsContainerLeft > div"
       )
-    ).map(div => div.innerText);
+    ).map((div) => div.innerText);
 
     const values = Array.apply(
       null,
       document.querySelectorAll(
         ".rightSectionHolder:last-child .detailsStatsContainerRight > div"
       )
-    ).map(div => div.innerText);
+    ).map((div) => div.innerText);
 
     for (const i in fields) {
       if (fields.hasOwnProperty(i) && values.hasOwnProperty(i)) {
