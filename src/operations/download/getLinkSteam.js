@@ -44,7 +44,7 @@ const acquireDownloadLink2 = async (id) => {
       visible: true,
       timeout: 100000,
     });
-  } catch {
+  } catch(e) {
     await page.close();
     await browser.close();
     throw new Err("Unable to download from steam");

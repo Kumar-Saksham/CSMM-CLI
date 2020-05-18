@@ -67,7 +67,7 @@ class ConfigCommand extends Command {
     } else {
       try {
         await setupUserConfig(userConfig, { suggestCurrentValues: true });
-      } catch {
+      } catch (e) {
         console.log(`${colors.yellow("Cancelling configuration")}`);
       }
     }

@@ -12,7 +12,7 @@ const getManager = async () => {
   let manager;
   try {
     manager = new Conf(options);
-  } catch {
+  } catch(e) {
     await fs.remove(path.join(__saveDir, "manager.json"));
     manager = new Conf(options);
   }

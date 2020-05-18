@@ -1,7 +1,7 @@
 {
   "name": "csmm-cli",
   "description": "A mod manager for Cities: Skylines",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": "Saksham Kumar",
   "bin": {
     "csmm": "./bin/run"
@@ -64,11 +64,15 @@
     ],
     "warn-if-update-available": {
       "timeoutInDays": 3,
-      "message": "<%= config.name %> update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>.\nUse: <%= chalk.yellow('npm update -g csmm-cli') %> to update."
+      "message": "<%= config.name %> update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>.\nUse: <%= chalk.yellow('npm install -g csmm-cli') %> to update."
     },
     "hooks": {
       "prerun": [
         "./src/hooks/prerun/parseUserConfig"
+      ],
+      "cleanup": [
+        "./src/hooks/cleanup/cleanPacked",
+        "./src/hooks/cleanup/cleanUnpacked"
       ]
     }
   },
