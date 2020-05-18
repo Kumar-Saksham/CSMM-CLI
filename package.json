@@ -1,7 +1,7 @@
 {
   "name": "csmm-cli",
   "description": "A mod manager for Cities: Skylines",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "author": "Saksham Kumar",
   "bin": {
     "csmm": "./bin/run"
