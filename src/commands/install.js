@@ -102,7 +102,7 @@ class InstallCommand extends Command {
     };
 
     console.log(summary(stats));
-
+    await this.config.runHook("cleanup", {});
     //setTimeout(() => nodeChecker(), 1000);
   }
 }
