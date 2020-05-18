@@ -40,18 +40,25 @@ const acquireDownloadLink2 = async (id) => {
 
   try {
     await page.click("#steamdownload.button");
-    await page.waitForSelector("#result > pre > a", {
+    await page.waitForSelector("#result > *", {
       visible: true,
       timeout: 100000,
     });
-  } catch(e) {
+  } catch (e) {
     await page.close();
     await browser.close();
-    throw new Err("Unable to download from steam");
+    throw new Err("Steam timeout");
   }
 
-  /* istanbul ignore next */
-  const downloadLink = await page.$eval("#result > pre > a", (dl) => dl.href);
+  let downloadLink;
+  try {
+    /* istanbul ignore next */
+    downloadLink = await page.$eval("#result > pre > a", (dl) => dl.href);
+  } catch (e) {
+    await page.close();
+    await browser.close();
+    throw new Err("Currently unavailable for download", "FAIL");
+  }
 
   await page.close();
   await browser.close();

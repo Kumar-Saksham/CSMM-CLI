@@ -72,7 +72,7 @@ const articleResolver = async (
     throw new Err("Currently only supports mods for Cities: Skylines", "FAIL");
   }
 
-  const isCollection = breadcrumbs.includes("collection");
+  const isCollection = !!(await page.$(".collectionChildren"));
 
   if (isCollection) {
     const collectionDetails = await parseCollection(page);
