@@ -14,7 +14,7 @@ const articleResolver = async (
   browser,
   pendingStage = []
 ) => {
-  const url = `https://steamcommunity.com/sharedfiles/filedetails/?id=${id}`;
+  const url = `https://steamcommunity.com/sharedfiles/filedetails/?id=${id}&l=english`;
   let page = await getPage(browser);
 
   await retry(
